@@ -1,0 +1,49 @@
+<html lang="en"  ng-app="app">
+    <head>
+        <meta charset="utf-8">
+        <title>Front</title>
+   
+        <script type="text/javascript">
+            mxBasePath = '.';
+        </script>
+        <script type="text/javascript" src="js/mxClient.js"></script>
+    </head>
+    <body>
+        <div>
+            <script type="text/javascript";>
+            function main(container) {
+             
+                mxEvent.disableContextMenu(container);
+                
+                var graph = new mxGraph(container);
+        
+                var parent = graph.getDefaultParent();
+              
+                graph.getModel().beginUpdate();
+                
+                try{
+                    var v1 = graph.insertVertex(parent, null, 'Hello,', 20, 20, 80, 30);
+                    var v2 = graph.insertVertex(parent, null, 'World!', 200, 150, 80, 30);
+                    var v3 = graph.insertVertex(parent, null, 'AZAZAZA', 20, 150, 80, 30);
+                    var e1 = graph.insertEdge(parent, null, '', v1, v2);
+                    var e2 = graph.insertEdge(parent, null, 'omg', v1, v3);
+
+                    v3.removeFromParent();
+                }
+                finally{
+                    // Updates the display
+                    graph.getModel().endUpdate();
+                }
+            
+        };
+            </script>
+
+        </div>   
+        <body onload="main(document.getElementById('graphContainer'))">
+
+    <!-- Creates a container for the graph with a grid wallpaper -->
+    <div id="graphContainer"
+        style="position:relative;overflow:hidden;width:321px;height:241px;background:url('editors/images/grid.gif');cursor:default;">
+    </div>
+    </body>
+</html>                                       
