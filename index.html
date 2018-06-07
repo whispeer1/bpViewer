@@ -2,127 +2,118 @@
     <head>
         <meta charset="utf-8">
         <title>Front</title>
-   
         <script type="text/javascript">
             mxBasePath = '.';
         </script>
         <script type="text/javascript" src="js/mxClient.js"></script>
+        <script type="text/javascript" src="jquery-3.3.1.min.js"></script>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+
+        <style type="text/css">
+      body {
+        padding-top: 5rem;
+      }
+      .starter-template {
+        padding: 3rem 1.5rem;
+        
+      }
+    </style>
     </head>
     <body>
         <div>
             <script type="text/javascript";>
-            function main(container) {
-             
-                mxEvent.disableContextMenu(container);
+                function main(container) {
+                 
+                    mxEvent.disableContextMenu(container);
+                    
+                    var graph = new mxGraph(container);
+            
+                    var parent = graph.getDefaultParent();
+                   
+                    var tt = mxRectangle(50, 120, 20 ,100);
+                    graph.setCellsMovable(false);
+
+         
+                    graph.getModel().beginUpdate();
+                    graph.cellsEditable = false;
+                    graph.cellsLocked = false;
+                    graph.cellsSelectable = false;
+                    try{
+                        var v1 = graph.insertVertex(parent, null, 'Hello,', 20, 20, 80, 30);
                 
-                var graph = new mxGraph(container);
-        
-                var parent = graph.getDefaultParent();
-               
-                var tt = mxRectangle(50, 120, 20 ,100);
-graph.setCellsMovable(false);
+                        var v5 = graph.insertVertex(parent, null, '', 140, 27, 16, 16, 'shape=ellipse;perimeter=ellipsePerimeter;fillColor=#A6A6A6;');
 
-     
-           graph.getModel().beginUpdate();
-               graph.cellsEditable = false;
-                graph.cellsLocked = false;
-                graph.cellsSelectable = false;
-                try{
-                    var v1 = graph.insertVertex(parent, null, 'Hello,', 20, 20, 80, 30);
-            
-                    var v5 = graph.insertVertex(parent, null, '', 140, 27, 16, 16, 'shape=ellipse;perimeter=ellipsePerimeter;fillColor=#A6A6A6;');
+                        graph.insertEdge(parent, null, null, v1, v5, 'crossover');
+                    //   graph.setLocked(true);
 
-                    graph.insertEdge(parent, null, null, v1, v5, 'crossover');
-                //   graph.setLocked(true);
+                    }
+                    finally{
+                        // Updates the display
+                        graph.getModel().endUpdate();
+                      //  graph.setLocked(true);  
 
-                }
-                finally{
-                    // Updates the display
-                    graph.getModel().endUpdate();
-                  //  graph.setLocked(true);  
+                    }
 
-                }
-
-                var overlay = new mxCellOverlay(new mxImage('editors/images/overlays/check.png', 16, 16), 'Overlay tooltip');
-
-                                var mxCellRendererInstallCellOverlayListeners = mxCellRenderer.prototype.installCellOverlayListeners;
-                                mxCellRenderer.prototype.installCellOverlayListeners = function(state, overlay, shape)
-                                {
-                                    mxCellRendererInstallCellOverlayListeners.apply(this, arguments);
-                                    var graph  = state.view.graph;
-
-                                    mxEvent.addGestureListeners(shape.node,
-                                        function (evt)
-                                        {
-                                            graph.fireMouseEvent(mxEvent.MOUSE_DOWN, new mxMouseEvent(evt, state));
-                                        },
-                                        function (evt)
-                                        {
-                                            graph.fireMouseEvent(mxEvent.MOUSE_MOVE, new mxMouseEvent(evt, state));
-                                        },
-                                        function (evt)
-                                        {
-                                            if (mxClient.IS_QUIRKS)
-                                            {
-                                                graph.fireMouseEvent(mxEvent.MOUSE_UP, new mxMouseEvent(evt, state));
-                                            }
-                                        });
-                                    
-                                    if (!mxClient.IS_TOUCH)
-                                    {
-                                        mxEvent.addListener(shape.node, 'mouseup', function (evt)
-                                        {
-                                            overlay.fireEvent(new mxEventObject(mxEvent.CLICK,
-                                                    'event', evt, 'cell', state.cell));
-                                        });
-                                    }
-                                };
-                                
-                                // Sets the overlay for the cell in the graph
-                                graph.addCellOverlay(v1, overlay);
-                                
-                                // Configures automatic expand on mouseover
-                                graph.popupMenuHandler.autoExpand = true;
-
-                                // Installs context menu
-                                graph.popupMenuHandler.factoryMethod = function(menu, cell, evt)
-                                {
-                                    menu.addItem('Item 1', null, function()
-                                    {
-                                        alert('Item 1');
-                                    });
-                                    
-                                    menu.addItem('Item 2', null, function()
-                                    {
-                                        alert('Item 2');
-                                    });
-
-                                    menu.addSeparator();
-                                    
-                                    var submenu1 = menu.addItem('Submenu 1', null, null);
-                                    
-                                    menu.addItem('Subitem 1', null, function()
-                                    {
-                                        alert('Subitem 1');
-                                    }, submenu1);
-                                    menu.addItem('Subitem 1', null, function()
-                                    {
-                                        alert('Subitem 2');
-                                    }, submenu1);
-                                };
-                    
-                    
-
-            
-        };
+                };
             </script>
 
         </div>   
         <body onload="main(document.getElementById('graphContainer'))">
+       
+        <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
+            <a class="navbar-brand" href="#">Navbar</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
 
-    <!-- Creates a container for the graph with a grid wallpaper -->
-    <div id="graphContainer"
-        style="position:relative;overflow:hidden;width:321px;height:241px;background:url('editors/images/grid.gif');cursor:default;">
-    </div>
+            <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+                <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Link</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link disabled" href="#">Disabled</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="https://example.com" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dropdown</a>
+                    <div class="dropdown-menu" aria-labelledby="dropdown01">
+                      <a class="dropdown-item" href="#">Action</a>
+                      <a class="dropdown-item" href="#">Another action</a>
+                      <a class="dropdown-item" href="#">Something else here</a>
+                    </div>
+                  </li>
+                </ul>
+                <form class="form-inline my-2 my-lg-0">
+                <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                </form>
+            </div>
+        </nav>
+
+        <main role="main" class="container-fluid" style="margin-left: 100px; font-size: 18px">
+            
+            <div class="row">
+                <div class="col-lg-4">
+                    Провайдер <span style="font-weight: bold">"testProvider"</span>    
+                </div>
+                
+            </div>       
+
+
+            <div class="starter-template" style="margin-top: 150px">
+                <h6>Визуализация</h6>       
+                <div id="graphContainer" style="position:relative;overflow:hidden;width:321px;height:241px;background-color: #eee;cursor:default;">
+                </div>
+                
+
+            </div>
+        </main>
+
     </body>
 </html>                                       
